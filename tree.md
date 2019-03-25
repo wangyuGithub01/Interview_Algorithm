@@ -1,11 +1,11 @@
 <!-- GFM-TOC -->
-（:fish: 表示自己重温的次数）
+（:fish: 表示容易忘记思路的）
 
 * [递归](#递归)
-    * [树的高度](#树的高度) :fish:
-    * [平衡树](#平衡树) :fish:
-    * [树的直径/最长路径](#树的直径) :fish:
-    * [翻转树](#翻转树) :fish:
+    * [树的高度](#树的高度)
+    * [平衡树](#平衡树) 
+    * [树的直径/最长路径](#树的直径)
+    * [翻转树](#翻转树) 
     * [归并两棵树](#归并两棵树)
     * [判断路径和是否等于一个数](#判断路径和是否等于一个数)
     * [统计路径和等于一个数的路径数量](#统计路径和等于一个数的路径数量)
@@ -205,12 +205,14 @@ return true, as there exist a root-to-leaf path 5->4->11->2 which sum is 22.
 
 路径和定义为从 root 到 leaf 的所有节点的和。
 
-```java
-public boolean hasPathSum(TreeNode root, int sum) {
-    if (root == null) return false;
-    if (root.left == null && root.right == null && root.val == sum) return true;
-    return hasPathSum(root.left, sum - root.val) || hasPathSum(root.right, sum - root.val);
-}
+```python
+class Solution:
+    def hasPathSum(self, root, target) :
+        if root==None:
+            return False
+        if root.left==None and root.right==None and root.val==target:
+            return True
+        return self.hasPathSum(root.left,target-root.val) or self.hasPathSum(root.right,target-root.val)
 ```
 
 ## 统计路径和等于一个数的路径数量
