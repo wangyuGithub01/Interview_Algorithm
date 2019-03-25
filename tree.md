@@ -2,7 +2,7 @@
 * [递归](#递归)
     * [树的高度](#树的高度)
     * [平衡树](#平衡树)
-    * [树的直径/最长路径](#树的直径/最长路径)
+    * [树的直径/最长路径](#树的直径)
     * [翻转树](#翻转树)
     * [归并两棵树](#归并两棵树)
     * [判断路径和是否等于一个数](#判断路径和是否等于一个数)
@@ -96,7 +96,7 @@ class Solution(object):
         return 1 + max(left,right)
 ```
 
-## 树的直径/最长路径
+## 树的直径
 
 [543. Diameter of Binary Tree (Easy)](https://leetcode.com/problems/diameter-of-binary-tree/description/)
 
