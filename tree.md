@@ -21,7 +21,7 @@
 * [层次遍历](#层次遍历) :tada:
     * [一棵树每层节点的平均数](#一棵树每层节点的平均数)
     * [得到左下角的节点](#得到左下角的节点)
-* [前中后序遍历](#前中后序遍历)
+* [前中后序遍历](#前中后序遍历) :tada:
     * [非递归实现二叉树的前序遍历](#非递归实现二叉树的前序遍历)
     * [非递归实现二叉树的后序遍历](#非递归实现二叉树的后序遍历)
     * [非递归实现二叉树的中序遍历](#非递归实现二叉树的中序遍历)
@@ -595,33 +595,35 @@ void dfs(TreeNode root) {
 [144. Binary Tree Preorder Traversal (Medium)](https://leetcode.com/problems/binary-tree-preorder-traversal/description/)
 
 ```python
-def preorderTraversal(self, root):
-     stack = [root]
-     res = []
-     while len(stack)>0:
-         root = stack.pop()
-         if root:
-             res.append(root.val)
-             stack.append(root.right)
-             stack.append(root.left)
-     return res
+class Solution:
+    def preorderTraversal(self, root):
+        stack = []
+        ret = []
+        while root or len(stack)>0:
+            if root:
+                ret.append(root.val)
+                stack.append(root.right)
+                stack.append(root.left)
+            root = stack.pop()
+        return ret
 ```
 ## 非递归实现二叉树的中序遍历
 
 [94. Binary Tree Inorder Traversal (Medium)](https://leetcode.com/problems/binary-tree-inorder-traversal/description/)
 
 ```python
-def inorderTraversal(self, root):
-     stack, res = [], []
-     node = root
-     while node or len(stack)>0:
-         while node:
-             stack.append(node)
-             node = node.left
-         node = stack.pop()
-         res.append(node.val)
-         node = node.right
-     return res
+class Solution:
+   def inorderTraversal(self, root):
+        stack, res = [], []
+        node = root
+        while node or len(stack)>0:
+            while node:
+                stack.append(node)
+                node = node.left
+            node = stack.pop()
+            res.append(node.val)
+            node = node.right
+        return res
 ```
 ## 非递归实现二叉树的后序遍历
 
