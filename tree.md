@@ -1,5 +1,7 @@
 <!-- GFM-TOC -->
-（:fish: 表示容易忘记思路的）
+:warning: 表示容易忘记思路的 \ 
+:deciduous_tree: 表示当前进度 \
+:tada: 表示已完成
 
 * [递归](#递归)
     * [树的高度](#树的高度)
@@ -8,15 +10,15 @@
     * [翻转树](#翻转树) 
     * [归并两棵树](#归并两棵树)
     * [判断路径和是否等于一个数](#判断路径和是否等于一个数)
-    * [统计路径和等于一个数的路径数量](#统计路径和等于一个数的路径数量) :fish:
-    * [子树](#子树)
-    * [树的对称](#树的对称)
+    * [统计路径和等于一个数的路径数量](#统计路径和等于一个数的路径数量) :warning:
+    * [子树](#子树) 
+    * [树的对称](#树的对称) :deciduous_tree:
     * [最小路径](#最小路径)
     * [统计左叶子节点的和](#统计左叶子节点的和)
     * [相同节点值的最大路径长度](#相同节点值的最大路径长度)
     * [间隔遍历](#间隔遍历)
     * [找出二叉树中第二小的节点](#找出二叉树中第二小的节点)
-* [层次遍历](#层次遍历)
+* [层次遍历](#层次遍历) :tada:
     * [一棵树每层节点的平均数](#一棵树每层节点的平均数)
     * [得到左下角的节点](#得到左下角的节点)
 * [前中后序遍历](#前中后序遍历)
@@ -480,25 +482,26 @@ public int findSecondMinimumValue(TreeNode root) {
 
 [637. Average of Levels in Binary Tree (Easy)](https://leetcode.com/problems/average-of-levels-in-binary-tree/description/)
 
-```java
-public List<Double> averageOfLevels(TreeNode root) {
-    List<Double> ret = new ArrayList<>();
-    if (root == null) return ret;
-    Queue<TreeNode> queue = new LinkedList<>();
-    queue.add(root);
-    while (!queue.isEmpty()) {
-        int cnt = queue.size();
-        double sum = 0;
-        for (int i = 0; i < cnt; i++) {
-            TreeNode node = queue.poll();
-            sum += node.val;
-            if (node.left != null) queue.add(node.left);
-            if (node.right != null) queue.add(node.right);
-        }
-        ret.add(sum / cnt);
-    }
-    return ret;
-}
+```python
+class Solution:
+    def averageOfLevels(self, root: TreeNode) -> List[float]:
+        if root==None:
+            return []
+        ret = []
+        queue = [root]
+        while len(queue)>0:
+            summ = 0
+            cnt = len(queue)
+            for i in range(cnt):
+                node = queue.pop(0)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+                summ += node.val
+            ret.append(summ/cnt)
+            
+        return ret
 ```
 
 ## 得到左下角的节点
@@ -520,17 +523,22 @@ Output:
 7
 ```
 
-```java
-public int findBottomLeftValue(TreeNode root) {
-    Queue<TreeNode> queue = new LinkedList<>();
-    queue.add(root);
-    while (!queue.isEmpty()) {
-        root = queue.poll();
-        if (root.right != null) queue.add(root.right);
-        if (root.left != null) queue.add(root.left);
-    }
-    return root.val;
-}
+```python
+# 两种思路，（1）从左到右层次遍历，返回最后一层第一个；（2）每层从右到左，返回最后一个
+# 
+class Solution:
+    def findBottomLeftValue(self, root: TreeNode) -> int:
+        if root==None:
+            return
+        queue = [root]
+        while len(queue):
+            node = queue.pop(0)
+            if node.right:
+                queue.append(node.right)
+            if node.left:
+                queue.append(node.left)
+                
+        return node.val
 ```
 
 # 前中后序遍历
