@@ -292,18 +292,22 @@ Given tree t:
 Return false.
 ```
 
-```java
-public boolean isSubtree(TreeNode s, TreeNode t) {
-    if (s == null) return false;
-    return isSubtreeWithRoot(s, t) || isSubtree(s.left, t) || isSubtree(s.right, t);
-}
-
-private boolean isSubtreeWithRoot(TreeNode s, TreeNode t) {
-    if (t == null && s == null) return true;
-    if (t == null || s == null) return false;
-    if (t.val != s.val) return false;
-    return isSubtreeWithRoot(s.left, t.left) && isSubtreeWithRoot(s.right, t.right);
-}
+```python
+class Solution:
+    def isSubtree(self, t1: TreeNode, t2: TreeNode) -> bool:
+        if t1==None or t2==None:
+            return False
+        return self.subtree(t1, t2) or self.isSubtree(t1.left, t2) or self.isSubtree(t1.right, t2)
+    
+    def subtree(self, root1, root2):
+        if root1==None and root2==None:
+            return True
+        if root1==None or root2==None:
+            return False
+        if root1.val==root2.val:
+            return self.subtree(root1.left, root2.left) and self.subtree(root1.right, root2.right) 
+        else:
+            return False
 ```
 
 ## 树的对称
@@ -319,17 +323,22 @@ private boolean isSubtreeWithRoot(TreeNode s, TreeNode t) {
 ```
 
 ```java
-public boolean isSymmetric(TreeNode root) {
-    if (root == null) return true;
-    return isSymmetric(root.left, root.right);
-}
-
-private boolean isSymmetric(TreeNode t1, TreeNode t2) {
-    if (t1 == null && t2 == null) return true;
-    if (t1 == null || t2 == null) return false;
-    if (t1.val != t2.val) return false;
-    return isSymmetric(t1.left, t2.right) && isSymmetric(t1.right, t2.left);
-}
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
+        if root==None:
+            return True
+        return self.check(root, root)
+    
+    def check(self, root1, root2):
+        if root1==None and root2==None:
+            return True
+        if root1==None or root2==None:
+            return False
+        
+        if root1.val==root2.val:
+            return self.check(root1.left, root2.right) and self.check(root1.right, root2.left)
+        else:
+            return False
 ```
 
 ## 最小路径
