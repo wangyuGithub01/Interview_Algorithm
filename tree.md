@@ -1,11 +1,11 @@
 <!-- GFM-TOC -->
-（:ballot_box_with_check: 表示自己重温的次数）
+（:fish: 表示自己重温的次数）
 
 * [递归](#递归)
-    * [树的高度](#树的高度) :ballot_box_with_check:
-    * [平衡树](#平衡树) :ballot_box_with_check:
-    * [树的直径/最长路径](#树的直径) :ballot_box_with_check:
-    * [翻转树](#翻转树) :ballot_box_with_check:
+    * [树的高度](#树的高度) :fish:
+    * [平衡树](#平衡树) :fish:
+    * [树的直径/最长路径](#树的直径) :fish:
+    * [翻转树](#翻转树) :fish:
     * [归并两棵树](#归并两棵树)
     * [判断路径和是否等于一个数](#判断路径和是否等于一个数)
     * [统计路径和等于一个数的路径数量](#统计路径和等于一个数的路径数量)
@@ -120,10 +120,6 @@ class Solution(object):
 ```python
 class Solution(object):
     def diameterOfBinaryTree(self, root):
-        """
-        :type root: TreeNode
-        :rtype: int
-        """
         if root==None:
             return 0
         self.diameter = 0
@@ -144,14 +140,15 @@ class Solution(object):
 
 [226. Invert Binary Tree (Easy)](https://leetcode.com/problems/invert-binary-tree/description/)
 
-```java
-public TreeNode invertTree(TreeNode root) {
-    if (root == null) return null;
-    TreeNode left = root.left;  // 后面的操作会改变 left 指针，因此先保存下来
-    root.left = invertTree(root.right);
-    root.right = invertTree(left);
-    return root;
-}
+```python
+class Solution(object):
+    def invertTree(self, root):
+        if root==None:
+            return
+        root.left, root.right = root.right, root.left
+        self.invertTree(root.left)
+        self.invertTree(root.right)
+        return root
 ```
 
 ## 归并两棵树
@@ -175,16 +172,17 @@ Output:
      5   4   7
 ```
 
-```java
-public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
-    if (t1 == null && t2 == null) return null;
-    if (t1 == null) return t2;
-    if (t2 == null) return t1;
-    TreeNode root = new TreeNode(t1.val + t2.val);
-    root.left = mergeTrees(t1.left, t2.left);
-    root.right = mergeTrees(t1.right, t2.right);
-    return root;
-}
+```python
+class Solution:
+    def mergeTrees(self, t1, t2):
+        if t1==None and t2==None:
+            return None
+        if t1==None or t2==None:
+            return t1 or t2
+        newt = TreeNode(t1.val + t2.val)
+        newt.left = self.mergeTrees(t1.left, t2.left)
+        newt.right = self.mergeTrees(t1.right, t2.right)
+        return newt
 ```
 
 ## 判断路径和是否等于一个数
