@@ -8,7 +8,7 @@
     * [翻转树](#翻转树) 
     * [归并两棵树](#归并两棵树)
     * [判断路径和是否等于一个数](#判断路径和是否等于一个数)
-    * [统计路径和等于一个数的路径数量](#统计路径和等于一个数的路径数量)
+    * [统计路径和等于一个数的路径数量](#统计路径和等于一个数的路径数量) :fish:
     * [子树](#子树)
     * [树的对称](#树的对称)
     * [最小路径](#最小路径)
@@ -239,20 +239,20 @@ Return 3. The paths that sum to 8 are:
 
 路径不一定以 root 开头，也不一定以 leaf 结尾，但是必须连续。
 
-```java
-public int pathSum(TreeNode root, int sum) {
-    if (root == null) return 0;
-    int ret = pathSumStartWithRoot(root, sum) + pathSum(root.left, sum) + pathSum(root.right, sum);
-    return ret;
-}
-
-private int pathSumStartWithRoot(TreeNode root, int sum) {
-    if (root == null) return 0;
-    int ret = 0;
-    if (root.val == sum) ret++;
-    ret += pathSumStartWithRoot(root.left, sum - root.val) + pathSumStartWithRoot(root.right, sum - root.val);
-    return ret;
-}
+```python
+class Solution(object):
+    def pathSum(self, root, target):
+        if root==None:
+            return 0
+        return self.helper(root,target) + self.pathSum(root.left,target) + self.pathSum(root.right, target)
+        
+    def helper(self, root, target): 
+        if root==None:
+            return 0
+        cur = 0
+        if root.val==target:
+            cur = 1
+        return cur + self.helper(root.left,target-root.val)+self.helper(root.right, target-root.val)
 ```
 
 ## 子树
