@@ -2,7 +2,7 @@
 * [递归](#递归)
     * [树的高度](#树的高度)
     * [平衡树](#平衡树)
-    * [两节点的最长路径](#两节点的最长路径)
+    * [树的最长路径](#树的最长路径)
     * [翻转树](#翻转树)
     * [归并两棵树](#归并两棵树)
     * [判断路径和是否等于一个数](#判断路径和是否等于一个数)
@@ -46,11 +46,17 @@
 
 [104. Maximum Depth of Binary Tree (Easy)](https://leetcode.com/problems/maximum-depth-of-binary-tree/description/)
 
-```java
-public int maxDepth(TreeNode root) {
-    if (root == null) return 0;
-    return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
-}
+```python
+class Solution(object):
+    def maxDepth(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        if root == None:
+            return 0
+        else:
+            return max(1 + self.maxDepth(root.left), 1 + self.maxDepth(root.right))
 ```
 
 ## 平衡树
@@ -67,54 +73,69 @@ public int maxDepth(TreeNode root) {
 
 平衡树左右子树高度差都小于等于 1
 
-```java
-private boolean result = true;
-
-public boolean isBalanced(TreeNode root) {
-    maxDepth(root);
-    return result;
-}
-
-public int maxDepth(TreeNode root) {
-    if (root == null) return 0;
-    int l = maxDepth(root.left);
-    int r = maxDepth(root.right);
-    if (Math.abs(l - r) > 1) result = false;
-    return 1 + Math.max(l, r);
-}
+```python
+class Solution(object):
+    def isBalanced(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        if root==None:
+            return True
+        self.balance = True
+        self.subBalance(root)
+        return self.balance
+    
+    def subBalance(self,root):
+        if root==None:
+            return 0
+        left = self.subBalance(root.left)
+        right = self.subBalance(root.right)
+        if abs(left-right)>1:
+            self.balance = False
+        return 1 + max(left,right)
 ```
 
-## 两节点的最长路径
+## 的最长路径
 
 [543. Diameter of Binary Tree (Easy)](https://leetcode.com/problems/diameter-of-binary-tree/description/)
 
 ```html
-Input:
+给定一棵二叉树，你需要计算它的直径长度。一棵二叉树的直径长度是任意两个结点路径长度中的最大值。这条路径可能穿过根结点。
 
-         1
-        / \
-       2  3
-      / \
-     4   5
+示例 :
+给定二叉树
 
-Return 3, which is the length of the path [4,2,1,3] or [5,2,1,3].
+          1
+         / \
+        2   3
+       / \     
+      4   5    
+返回 3, 它的长度是路径 [4,2,1,3] 或者 [5,2,1,3]。
+
+注意：两结点之间的路径长度是以它们之间边的数目表示。
 ```
-
-```java
-private int max = 0;
-
-public int diameterOfBinaryTree(TreeNode root) {
-    depth(root);
-    return max;
-}
-
-private int depth(TreeNode root) {
-    if (root == null) return 0;
-    int leftDepth = depth(root.left);
-    int rightDepth = depth(root.right);
-    max = Math.max(max, leftDepth + rightDepth);
-    return Math.max(leftDepth, rightDepth) + 1;
-}
+```python
+class Solution(object):
+    def diameterOfBinaryTree(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        if root==None:
+            return 0
+        self.diameter = 0
+        self.helper(root)
+        return self.diameter - 1 # 减1是因为最长路径的”顶点“被两边的”半径“包含，计算了两次
+    
+    def helper(self, root):
+        if root == None:
+            return 0
+        left = self.helper(root.left)
+        right = self.helper(root.right)
+        d = left + 1 + right # 以当前root为顶点的最长路径
+        self.diameter =  max(d, self.diameter)
+        return max(1+left, 1+right) # 当前root对应的最长“半径”
 ```
 
 ## 翻转树
