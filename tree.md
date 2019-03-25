@@ -594,66 +594,54 @@ void dfs(TreeNode root) {
 
 [144. Binary Tree Preorder Traversal (Medium)](https://leetcode.com/problems/binary-tree-preorder-traversal/description/)
 
-```java
-public List<Integer> preorderTraversal(TreeNode root) {
-    List<Integer> ret = new ArrayList<>();
-    Stack<TreeNode> stack = new Stack<>();
-    stack.push(root);
-    while (!stack.isEmpty()) {
-        TreeNode node = stack.pop();
-        if (node == null) continue;
-        ret.add(node.val);
-        stack.push(node.right);  // 先右后左，保证左子树先遍历
-        stack.push(node.left);
-    }
-    return ret;
-}
+```python
+def preorderTraversal(self, root):
+     stack = [root]
+     res = []
+     while len(stack)>0:
+         root = stack.pop()
+         if root:
+             res.append(root.val)
+             stack.append(root.right)
+             stack.append(root.left)
+     return res
 ```
-
-## 非递归实现二叉树的后序遍历
-
-[145. Binary Tree Postorder Traversal (Medium)](https://leetcode.com/problems/binary-tree-postorder-traversal/description/)
-
-前序遍历为 root -> left -> right，后序遍历为 left -> right -> root。可以修改前序遍历成为 root -> right -> left，那么这个顺序就和后序遍历正好相反。
-
-```java
-public List<Integer> postorderTraversal(TreeNode root) {
-    List<Integer> ret = new ArrayList<>();
-    Stack<TreeNode> stack = new Stack<>();
-    stack.push(root);
-    while (!stack.isEmpty()) {
-        TreeNode node = stack.pop();
-        if (node == null) continue;
-        ret.add(node.val);
-        stack.push(node.left);
-        stack.push(node.right);
-    }
-    Collections.reverse(ret);
-    return ret;
-}
-```
-
 ## 非递归实现二叉树的中序遍历
 
 [94. Binary Tree Inorder Traversal (Medium)](https://leetcode.com/problems/binary-tree-inorder-traversal/description/)
 
-```java
-public List<Integer> inorderTraversal(TreeNode root) {
-    List<Integer> ret = new ArrayList<>();
-    if (root == null) return ret;
-    Stack<TreeNode> stack = new Stack<>();
-    TreeNode cur = root;
-    while (cur != null || !stack.isEmpty()) {
-        while (cur != null) {
-            stack.push(cur);
-            cur = cur.left;
-        }
-        TreeNode node = stack.pop();
-        ret.add(node.val);
-        cur = node.right;
-    }
-    return ret;
-}
+```python
+def inorderTraversal(self, root):
+     stack, res = [], []
+     node = root
+     while node or len(stack)>0:
+         while node:
+             stack.append(node)
+             node = node.left
+         node = stack.pop()
+         res.append(node.val)
+         node = node.right
+     return res
+```
+## 非递归实现二叉树的后序遍历
+
+[145. Binary Tree Postorder Traversal (Medium)](https://leetcode.com/problems/binary-tree-postorder-traversal/description/)
+
+```python
+def postorderTraversal(self, root):
+     res, stack = [], [(root, False)]
+     while stack:
+         node, visited = stack.pop()
+         if node:
+             if visited:
+                 # add to result if visited
+                 res.append(node.val)
+             else:
+                 # post-order
+                 stack.append((node, True))
+                 stack.append((node.right, False))
+                 stack.append((node.left, False))
+     return res
 ```
 
 # BST
