@@ -3,7 +3,7 @@
 :deciduous_tree: 表示当前进度 \
 :tada: 表示已完成
 
-* [递归](#递归)
+* [递归](#递归) :tada:
     * [树的高度](#树的高度)
     * [平衡树](#平衡树) 
     * [树的直径/最长路径](#树的直径)
@@ -15,8 +15,8 @@
     * [树的对称](#树的对称) 
     * [最小路径](#最小路径)
     * [统计左叶子节点的和](#统计左叶子节点的和) 
-    * [相同节点值的最大路径长度](#相同节点值的最大路径长度) :deciduous_tree:
-    * [间隔遍历](#间隔遍历)
+    * [相同节点值的最大路径长度](#相同节点值的最大路径长度) 
+    * [间隔遍历](#间隔遍历) :warning:
     * [找出二叉树中第二小的节点](#找出二叉树中第二小的节点)
 * [层次遍历](#层次遍历) :tada:
     * [一棵树每层节点的平均数](#一棵树每层节点的平均数)
@@ -442,16 +442,29 @@ class Solution:
      3   1
 Maximum amount of money the thief can rob = 3 + 3 + 1 = 7.
 ```
-
-```java
-public int rob(TreeNode root) {
-    if (root == null) return 0;
-    int val1 = root.val;
-    if (root.left != null) val1 += rob(root.left.left) + rob(root.left.right);
-    if (root.right != null) val1 += rob(root.right.left) + rob(root.right.right);
-    int val2 = rob(root.left) + rob(root.right);
-    return Math.max(val1, val2);
-}
+```python
+class Solution(object):
+    def __init__(self):
+        self.map = {}
+    def rob(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        if root==None:
+            return 0
+        if root in self.map:
+            return self.map[root]
+        val = 0
+        if root.left:
+            val += self.rob(root.left.left)
+            val += self.rob(root.left.right)
+        if root.right:
+            val += self.rob(root.right.left)
+            val += self.rob(root.right.right)
+        self.map[root] = max(root.val+val, self.rob(root.left) + self.rob(root.right))
+        
+        return self.map[root]
 ```
 
 ## 找出二叉树中第二小的节点
@@ -471,18 +484,37 @@ Output: 5
 
 一个节点要么具有 0 个或 2 个子节点，如果有子节点，那么根节点是最小的节点。
 
-```java
-public int findSecondMinimumValue(TreeNode root) {
-    if (root == null) return -1;
-    if (root.left == null && root.right == null) return -1;
-    int leftVal = root.left.val;
-    int rightVal = root.right.val;
-    if (leftVal == root.val) leftVal = findSecondMinimumValue(root.left);
-    if (rightVal == root.val) rightVal = findSecondMinimumValue(root.right);
-    if (leftVal != -1 && rightVal != -1) return Math.min(leftVal, rightVal);
-    if (leftVal != -1) return leftVal;
-    return rightVal;
-}
+```python
+class Solution:
+    def findSecondMinimumValue(self, root: TreeNode) -> int:
+        if root==None:
+            return -1
+        self.min = [float('inf'),float('inf')]
+        self.helper(root)
+        if self.min[1]==float('inf'):
+            return -1
+        return self.min[1]
+        
+    def helper(self,root):
+        if root==None:
+            return
+        if root.left and root.right:
+            v = min(root.left.val, root.right.val)
+            self.insert(v)
+        else:
+            self.insert(root.val)
+        self.helper(root.right)
+        self.helper(root.left)
+            
+    def insert(self, v):
+        if v in self.min:
+            return
+        elif v < self.min[0]:
+            t = self.min[0]
+            self.min[0] = v
+            self.min[1] = t
+        elif v < self.min[1]:
+            self.min[1] = v
 ```
 
 # 层次遍历
