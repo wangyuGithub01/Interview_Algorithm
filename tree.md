@@ -12,10 +12,10 @@
     * [判断路径和是否等于一个数](#判断路径和是否等于一个数)
     * [统计路径和等于一个数的路径数量](#统计路径和等于一个数的路径数量) :warning:
     * [子树](#子树) 
-    * [树的对称](#树的对称) :deciduous_tree:
+    * [树的对称](#树的对称) 
     * [最小路径](#最小路径)
-    * [统计左叶子节点的和](#统计左叶子节点的和)
-    * [相同节点值的最大路径长度](#相同节点值的最大路径长度)
+    * [统计左叶子节点的和](#统计左叶子节点的和) 
+    * [相同节点值的最大路径长度](#相同节点值的最大路径长度) :deciduous_tree:
     * [间隔遍历](#间隔遍历)
     * [找出二叉树中第二小的节点](#找出二叉树中第二小的节点)
 * [层次遍历](#层次遍历) :tada:
@@ -324,7 +324,7 @@ class Solution:
 3  4 4  3
 ```
 
-```java
+```python
 class Solution:
     def isSymmetric(self, root: TreeNode) -> bool:
         if root==None:
@@ -349,14 +349,16 @@ class Solution:
 
 树的根节点到叶子节点的最小路径长度
 
-```java
-public int minDepth(TreeNode root) {
-    if (root == null) return 0;
-    int left = minDepth(root.left);
-    int right = minDepth(root.right);
-    if (left == 0 || right == 0) return left + right + 1;
-    return Math.min(left, right) + 1;
-}
+```python
+class Solution:
+    def minDepth(self, root: TreeNode) -> int:
+        if root==None:
+            return 0
+        left = self.minDepth(root.left)
+        right = self.minDepth(root.right)
+        if left==0 or right==0:
+            return left+right+1
+        return min(left, right) + 1
 ```
 
 ## 统计左叶子节点的和
@@ -373,17 +375,19 @@ public int minDepth(TreeNode root) {
 There are two left leaves in the binary tree, with values 9 and 15 respectively. Return 24.
 ```
 
-```java
-public int sumOfLeftLeaves(TreeNode root) {
-    if (root == null) return 0;
-    if (isLeaf(root.left)) return root.left.val + sumOfLeftLeaves(root.right);
-    return sumOfLeftLeaves(root.left) + sumOfLeftLeaves(root.right);
-}
-
-private boolean isLeaf(TreeNode node){
-    if (node == null) return false;
-    return node.left == null && node.right == null;
-}
+```python
+class Solution:
+    def sumOfLeftLeaves(self, root: TreeNode) -> int:
+        if root==None:
+            return 0
+        val = 0
+        if root.left!=None:
+            if root.left.right==None and root.left.left==None:
+                val += root.left.val
+            val += self.sumOfLeftLeaves(root.left)
+        if root.right!=None:
+            val += self.sumOfLeftLeaves(root.right)
+        return val
 ```
 
 ## 相同节点值的最大路径长度
@@ -400,23 +404,30 @@ private boolean isLeaf(TreeNode node){
 Output : 2
 ```
 
-```java
-private int path = 0;
-
-public int longestUnivaluePath(TreeNode root) {
-    dfs(root);
-    return path;
-}
-
-private int dfs(TreeNode root){
-    if (root == null) return 0;
-    int left = dfs(root.left);
-    int right = dfs(root.right);
-    int leftPath = root.left != null && root.left.val == root.val ? left + 1 : 0;
-    int rightPath = root.right != null && root.right.val == root.val ? right + 1 : 0;
-    path = Math.max(path, leftPath + rightPath);
-    return Math.max(leftPath, rightPath);
-}
+```python
+class Solution:
+    def longestUnivaluePath(self, root: TreeNode) -> int:
+        if root==None:
+            return 0
+        self.l = 0
+        self.helper(root)
+        return self.l
+    def helper(self, root):
+        if root==None:
+            return 0
+        left = self.helper(root.left)
+        right = self.helper(root.right)
+        
+        if root.left and root.left.val == root.val:
+            left = 1 + left
+        else:
+            left = 0
+        if root.right and root.right.val == root.val:
+            right = 1 + right
+        else:
+            right = 0
+        self.l = max(self.l, right+left)
+        return max(left,right)
 ```
 
 ## 间隔遍历
