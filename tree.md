@@ -695,7 +695,7 @@ def postorderTraversal(self, root):
 
 二叉查找树中序遍历有序。
 
-## 修剪二叉查找树
+## 修剪二叉查找树 :warning:
 
 [669. Trim a Binary Search Tree (Easy)](https://leetcode.com/problems/trim-a-binary-search-tree/description/)
 
@@ -724,60 +724,43 @@ Output:
 
 题目描述：只保留值在 L \~ R 之间的节点
 
-```java
-public TreeNode trimBST(TreeNode root, int L, int R) {
-    if (root == null) return null;
-    if (root.val > R) return trimBST(root.left, L, R);
-    if (root.val < L) return trimBST(root.right, L, R);
-    root.left = trimBST(root.left, L, R);
-    root.right = trimBST(root.right, L, R);
-    return root;
-}
+```python
+class Solution:
+    def trimBST(self, root: TreeNode, L: int, R: int) -> TreeNode:
+        if root==None:
+            return
+        if root.val < L :
+            return self.trimBST(root.right, L, R)
+        if root.val > R:
+            return self.trimBST(root.left, L, R)
+        root.left = self.trimBST(root.left, L, R)
+        root.right = self.trimBST(root.right, L, R)
+        return root
 ```
 
 ## 寻找二叉查找树的第 k 个元素
 
 [230. Kth Smallest Element in a BST (Medium)](https://leetcode.com/problems/kth-smallest-element-in-a-bst/description/)
 
-
 中序遍历解法：
-
-```java
-private int cnt = 0;
-private int val;
-
-public int kthSmallest(TreeNode root, int k) {
-    inOrder(root, k);
-    return val;
-}
-
-private void inOrder(TreeNode node, int k) {
-    if (node == null) return;
-    inOrder(node.left, k);
-    cnt++;
-    if (cnt == k) {
-        val = node.val;
-        return;
-    }
-    inOrder(node.right, k);
-}
+```python
+class Solution:
+    def kthSmallest(self, root: TreeNode, k: int) -> int:
+        self.cnt = 0
+        self.val = -1
+        def helper(root):
+            if root==None:
+                return
+            helper(root.left)
+            self.cnt += 1
+            if self.cnt == k:
+                self.val = root.val
+                return
+            helper(root.right)
+        helper(root)
+        return self.val
 ```
 
-递归解法：
-
-```java
-public int kthSmallest(TreeNode root, int k) {
-    int leftCnt = count(root.left);
-    if (leftCnt == k - 1) return root.val;
-    if (leftCnt > k - 1) return kthSmallest(root.left, k);
-    return kthSmallest(root.right, k - leftCnt - 1);
-}
-
-private int count(TreeNode node) {
-    if (node == null) return 0;
-    return 1 + count(node.left) + count(node.right);
-}
-```
 
 ## 把二叉查找树每个节点的值都加上比它大的节点的值
 
