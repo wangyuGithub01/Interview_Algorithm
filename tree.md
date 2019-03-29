@@ -762,7 +762,7 @@ class Solution:
 ```
 
 
-## 把二叉查找树每个节点的值都加上比它大的节点的值
+## 把二叉查找树每个节点的值都加上比它大的节点的值 :deciduous_tree:
 
 [Convert BST to Greater Tree (Easy)](https://leetcode.com/problems/convert-bst-to-greater-tree/description/)
 
