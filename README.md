@@ -22,5 +22,5 @@
 - 二分查找
 - 分治
 - 搜索
-- 动态规划
+- [动态规划](https://github.com/wangyuGithub01/Interview_Algorithm/blob/master/dp.md)
 - 数学
