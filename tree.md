@@ -780,23 +780,25 @@ Output: The root of a Greater Tree like this:
           20     13
 ```
 
-先遍历右子树。
+中序遍历思想，不过是先遍历右子树， root加上右边的。
 
-```java
-private int sum = 0;
-
-public TreeNode convertBST(TreeNode root) {
-    traver(root);
-    return root;
-}
-
-private void traver(TreeNode node) {
-    if (node == null) return;
-    traver(node.right);
-    sum += node.val;
-    node.val = sum;
-    traver(node.left);
-}
+```python
+class Solution:
+    def convertBST(self, root: TreeNode) -> TreeNode:
+        self.sum = 0
+        self.helper(root)
+        return root
+        
+    def helper(self, root):
+        if root==None:
+            return
+        self.helper(root.right)
+        
+        tmp = self.sum
+        self.sum += root.val
+        root.val += tmp
+        
+        self.helper(root.left)
 ```
 
 ## 二叉查找树的最近公共祖先
