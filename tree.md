@@ -899,29 +899,30 @@ One possible answer is: [0,-3,9,-10,null,5], which represents the following heig
  -10  5
 ```
 
-```java
-public TreeNode sortedListToBST(ListNode head) {
-    if (head == null) return null;
-    if (head.next == null) return new TreeNode(head.val);
-    ListNode preMid = preMid(head);
-    ListNode mid = preMid.next;
-    preMid.next = null;  // 断开链表
-    TreeNode t = new TreeNode(mid.val);
-    t.left = sortedListToBST(head);
-    t.right = sortedListToBST(mid.next);
-    return t;
-}
-
-private ListNode preMid(ListNode head) {
-    ListNode slow = head, fast = head.next;
-    ListNode pre = head;
-    while (fast != null && fast.next != null) {
-        pre = slow;
-        slow = slow.next;
-        fast = fast.next.next;
-    }
-    return pre;
-}
+```python
+class Solution:
+    def sortedListToBST(self, head):
+        if head == None:
+            return None
+        if head.next == None:
+            return TreeNode(head.val)
+        premid = self.pre_mid(head) 
+        mid = premid.next
+        midnext = mid.next
+        premid.next = None
+        t = TreeNode(mid.val)
+        t.left = self.sortedListToBST(head)
+        t.right = self.sortedListToBST(midnext)
+        return t
+    def pre_mid(self, head):
+        pre = head
+        slow = head
+        fast = head.next
+        while fast!=None and fast.next!=None:
+            pre = slow
+            slow = slow.next
+            fast = fast.next.next
+        return pre
 ```
 
 ## 在二叉查找树中寻找两个节点，使它们的和为一个给定值
@@ -941,31 +942,30 @@ Target = 9
 
 Output: True
 ```
-
-使用中序遍历得到有序数组之后，再利用双指针对数组进行查找。
-
 应该注意到，这一题不能用分别在左右子树两部分来处理这种思想，因为两个待求的节点可能分别在左右子树中。
 
-```java
-public boolean findTarget(TreeNode root, int k) {
-    List<Integer> nums = new ArrayList<>();
-    inOrder(root, nums);
-    int i = 0, j = nums.size() - 1;
-    while (i < j) {
-        int sum = nums.get(i) + nums.get(j);
-        if (sum == k) return true;
-        if (sum < k) i++;
-        else j--;
-    }
-    return false;
-}
+```python
+class Solution:
+    def findTarget(self, root: TreeNode, k: int) -> bool:
+        traversed = []
+        flag = False
+        def inorder(node):
+            nonlocal flag
+            if node==None:
+                return None
+            if k-node.val in traversed:
+                flag = True
+                return
+            traversed.append(node.val)
+            inorder(node.left)
+            inorder(node.right)
 
-private void inOrder(TreeNode root, List<Integer> nums) {
-    if (root == null) return;
-    inOrder(root.left, nums);
-    nums.add(root.val);
-    inOrder(root.right, nums);
-}
+        inorder(root)
+        # print(flag)
+        if flag==True:
+            return True
+        # print(traversed)
+        return False
 ```
 
 ## 在二叉查找树中查找两个节点之差的最小绝对值
@@ -988,22 +988,27 @@ Output:
 
 利用二叉查找树的中序遍历为有序的性质，计算中序遍历中临近的两个节点之差的绝对值，取最小值。
 
-```java
-private int minDiff = Integer.MAX_VALUE;
-private TreeNode preNode = null;
-
-public int getMinimumDifference(TreeNode root) {
-    inOrder(root);
-    return minDiff;
-}
-
-private void inOrder(TreeNode node) {
-    if (node == null) return;
-    inOrder(node.left);
-    if (preNode != null) minDiff = Math.min(minDiff, node.val - preNode.val);
-    preNode = node;
-    inOrder(node.right);
-}
+```python
+class Solution:
+    def getMinimumDifference(self, root: TreeNode) -> int:
+        pre = None
+        mindiff = float("inf")
+        def inorder(node):
+            nonlocal pre, mindiff
+            if node == None:
+                return
+            
+            inorder(node.left)
+            
+            if pre==None:
+                pre = node.val
+            else:
+                mindiff = min(mindiff, node.val-pre)
+                pre = node.val
+            # print(pre, mindiff)
+            inorder(node.right)
+        inorder(root)
+        return mindiff
 ```
 
 ## 寻找二叉查找树中出现次数最多的值
