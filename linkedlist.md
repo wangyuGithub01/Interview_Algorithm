@@ -48,15 +48,18 @@ B:    b1 → b2 → b3        e1 → e2
 
 如果不存在交点，那么 a + b = b + a，以下实现代码中 l1 和 l2 会同时为 null，从而退出循环。
 
-```java
-public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-    ListNode l1 = headA, l2 = headB;
-    while (l1 != l2) {
-        l1 = (l1 == null) ? headB : l1.next;
-        l2 = (l2 == null) ? headA : l2.next;
-    }
-    return l1;
-}
+```python
+class Solution(object):
+    def getIntersectionNode(self, headA, headB):
+        """
+        :type head1, head1: ListNode
+        :rtype: ListNode
+        """
+        pa, pb = headA, headB
+        while pa!=pb:
+            pa = pa.next if pa else headB
+            pb = pb.next if pb else headA
+        return pa
 ```
 
 如果只是判断是否存在交点，那么就是另一个问题，即 [编程之美 3.6]() 的问题。有两种解法：
@@ -68,52 +71,57 @@ public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
 
 [206. Reverse Linked List (Easy)](https://leetcode.com/problems/reverse-linked-list/description/)
 
-递归
-
-```java
-public ListNode reverseList(ListNode head) {
-    if (head == null || head.next == null) {
-        return head;
-    }
-    ListNode next = head.next;
-    ListNode newHead = reverseList(next);
-    next.next = head;
-    head.next = null;
-    return newHead;
-}
-```
-
-头插法
-
-```java
-public ListNode reverseList(ListNode head) {
-    ListNode newHead = new ListNode(-1);
-    while (head != null) {
-        ListNode next = head.next;
-        head.next = newHead.next;
-        newHead.next = head;
-        head = next;
-    }
-    return newHead.next;
-}
+```python
+class Solution(object):
+    def reverseList_iter(self, head): # 迭代
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        prev, cur = None, head
+        while cur:
+            tmp = cur.next
+            cur.next = prev
+            prev, cur = cur, tmp
+        return prev
+    
+    def reverseList(self, head): # 递归
+        def reverse(cur, prev):
+            if cur!=None:
+                tmp = cur.next
+                cur.next = prev
+                return reverse(tmp, cur)
+            else:
+                return prev
+        return reverse(head, None)
 ```
 
 #  3. 归并两个有序的链表
 
 [21. Merge Two Sorted Lists (Easy)](https://leetcode.com/problems/merge-two-sorted-lists/description/)
 
-```java
-public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-    if (l1 == null) return l2;
-    if (l2 == null) return l1;
-    if (l1.val < l2.val) {
-        l1.next = mergeTwoLists(l1.next, l2);
-        return l1;
-    } else {
-        l2.next = mergeTwoLists(l1, l2.next);
-        return l2;
-    }
-}
+```python
+class Solution(object):
+    def mergeTwoLists(self, l1, l2):
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        if l1==None and l2==None:
+            return None
+        newhead = ListNode(None)
+        cur = newhead
+        while l1!=None and l2!=None:
+            if l1.val < l2.val:
+                cur.next = l1
+                l1 = l1.next
+            else:
+                cur.next = l2
+                l2 = l2.next
+            cur = cur.next
+        cur.next = l1 if l1 else l2
+        return newhead.next
 ```
 
 #  4. 从有序链表中删除重复节点
