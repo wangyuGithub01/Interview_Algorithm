@@ -51,10 +51,6 @@ B:    b1 → b2 → b3        e1 → e2
 ```python
 class Solution(object):
     def getIntersectionNode(self, headA, headB):
-        """
-        :type head1, head1: ListNode
-        :rtype: ListNode
-        """
         pa, pb = headA, headB
         while pa!=pb:
             pa = pa.next if pa else headB
@@ -74,10 +70,6 @@ class Solution(object):
 ```python
 class Solution(object):
     def reverseList_iter(self, head): # 迭代
-        """
-        :type head: ListNode
-        :rtype: ListNode
-        """
         prev, cur = None, head
         while cur:
             tmp = cur.next
@@ -103,11 +95,6 @@ class Solution(object):
 ```python
 class Solution(object):
     def mergeTwoLists(self, l1, l2):
-        """
-        :type l1: ListNode
-        :type l2: ListNode
-        :rtype: ListNode
-        """
         if l1==None and l2==None:
             return None
         newhead = ListNode(None)
@@ -136,10 +123,6 @@ Given 1->1->2->3->3, return 1->2->3.
 ```python
 class Solution(object):
     def deleteDuplicates(self, head):
-        """
-        :type head: ListNode
-        :rtype: ListNode
-        """
         if not head:
             return
         p = head
@@ -346,21 +329,22 @@ Given 1->2->3->4->5->NULL,
 return 1->3->5->2->4->NULL.
 ```
 
-```java
-public ListNode oddEvenList(ListNode head) {
-    if (head == null) {
-        return head;
-    }
-    ListNode odd = head, even = head.next, evenHead = even;
-    while (even != null && even.next != null) {
-        odd.next = odd.next.next;
-        odd = odd.next;
-        even.next = even.next.next;
-        even = even.next;
-    }
-    odd.next = evenHead;
-    return head;
-}
+```python
+class Solution(object):
+    def oddEvenList(self, head):
+        if not head or not head.next:
+            return head
+        po = ListNode(None)
+        p = ListNode(None)
+        ji, ou = head, head.next
+        p.next, po.next = ji, ou
+        while ji.next and ou.next:
+            ji.next = ou.next
+            ou.next = ou.next.next
+            ji = ji.next
+            ou = ou.next
+        ji.next = po.next
+        return p.next
 ```
 
 
