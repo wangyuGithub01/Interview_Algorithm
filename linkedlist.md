@@ -133,12 +133,24 @@ Given 1->1->2, return 1->2.
 Given 1->1->2->3->3, return 1->2->3.
 ```
 
-```java
-public ListNode deleteDuplicates(ListNode head) {
-    if (head == null || head.next == null) return head;
-    head.next = deleteDuplicates(head.next);
-    return head.val == head.next.val ? head.next : head;
-}
+```python
+class Solution(object):
+    def deleteDuplicates(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if not head:
+            return
+        p = head
+        prev, cur = head, head.next
+        while cur:
+            if cur.val==prev.val:
+                prev.next = cur.next
+                prev, cur = prev, cur.next
+            else:
+                prev, cur = cur, cur.next
+        return p
 ```
 
 #  5. 删除链表的倒数第 n 个节点
@@ -150,21 +162,23 @@ Given linked list: 1->2->3->4->5, and n = 2.
 After removing the second node from the end, the linked list becomes 1->2->3->5.
 ```
 
-```java
-public ListNode removeNthFromEnd(ListNode head, int n) {
-    ListNode fast = head;
-    while (n-- > 0) {
-        fast = fast.next;
-    }
-    if (fast == null) return head.next;
-    ListNode slow = head;
-    while (fast.next != null) {
-        fast = fast.next;
-        slow = slow.next;
-    }
-    slow.next = slow.next.next;
-    return head;
-}
+```python
+class Solution(object):
+    def removeNthFromEnd(self, head, n):
+        p = ListNode(None)
+        p.next = head
+        fast, slow = p, p
+        while n>0:
+            fast = fast.next
+            n -= 1
+        while fast and fast.next:
+            fast = fast.next
+            slow = slow.next
+        # print(slow.val)
+        if slow.next:
+            slow.next = slow.next.next
+            return p.next
+        return 
 ```
 
 #  6. 交换链表中的相邻结点
@@ -177,22 +191,21 @@ Given 1->2->3->4, you should return the list as 2->1->4->3.
 
 题目要求：不能修改结点的 val 值，O(1) 空间复杂度。
 
-```java
-public ListNode swapPairs(ListNode head) {
-    ListNode node = new ListNode(-1);
-    node.next = head;
-    ListNode pre = node;
-    while (pre.next != null && pre.next.next != null) {
-        ListNode l1 = pre.next, l2 = pre.next.next;
-        ListNode next = l2.next;
-        l1.next = next;
-        l2.next = l1;
-        pre.next = l2;
-
-        pre = l1;
-    }
-    return node.next;
-}
+```python
+class Solution(object):
+    def swapPairs(self, head):
+        if not head or not head.next:
+            return head
+        p = ListNode(None)
+        p.next = head
+        prev, cur = p, p.next
+        while cur and cur.next:
+            nxt = cur.next
+            # print(cur.val, nxt.val)
+            prev.next, cur.next = nxt, nxt.next
+            nxt.next = cur
+            prev, cur = cur, cur.next
+        return p.next
 ```
 
 #  7. 链表求和
