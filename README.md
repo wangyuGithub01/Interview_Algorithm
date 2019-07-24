@@ -5,6 +5,9 @@
 - 已完成：树
 
 ### 剑指offer
+- [线性结构](list_offer.md)
+- [树](tree_offer.md)
+- [字符串](string_offer.md)
 
 ### 数据结构相关
 - [树](tree.md)：二叉树，二叉搜索树，字典树
