@@ -202,32 +202,28 @@ Output: 7 -> 8 -> 0 -> 7
 
 题目要求：不能修改原始链表。
 
-```java
-public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-    Stack<Integer> l1Stack = buildStack(l1);
-    Stack<Integer> l2Stack = buildStack(l2);
-    ListNode head = new ListNode(-1);
-    int carry = 0;
-    while (!l1Stack.isEmpty() || !l2Stack.isEmpty() || carry != 0) {
-        int x = l1Stack.isEmpty() ? 0 : l1Stack.pop();
-        int y = l2Stack.isEmpty() ? 0 : l2Stack.pop();
-        int sum = x + y + carry;
-        ListNode node = new ListNode(sum % 10);
-        node.next = head.next;
-        head.next = node;
-        carry = sum / 10;
-    }
-    return head.next;
-}
-
-private Stack<Integer> buildStack(ListNode l) {
-    Stack<Integer> stack = new Stack<>();
-    while (l != null) {
-        stack.push(l.val);
-        l = l.next;
-    }
-    return stack;
-}
+```python
+class Solution(object):
+    def addTwoNumbers(self, l1, l2):
+        def build_stack(l):
+            stack = []
+            while l:
+                stack.append(l.val)
+                l = l.next
+            return stack
+        s1 = build_stack(l1)
+        s2 = build_stack(l2)
+        dummy = ListNode(None)
+        jinwei = 0
+        while s1 or s2 or jinwei:
+            s1v = s1.pop(-1) if s1 else 0
+            s2v = s2.pop(-1) if s2 else 0
+            val = (jinwei + s1v + s2v) % 10
+            jinwei = (jinwei +  s1v + s2v) / 10
+            node = ListNode(val)
+            node.next = dummy.next
+            dummy.next = node
+        return dummy.next
 ```
 
 #  8. 回文链表
@@ -238,45 +234,34 @@ private Stack<Integer> buildStack(ListNode l) {
 
 切成两半，把后半段反转，然后比较两半是否相等。
 
-```java
-public boolean isPalindrome(ListNode head) {
-    if (head == null || head.next == null) return true;
-    ListNode slow = head, fast = head.next;
-    while (fast != null && fast.next != null) {
-        slow = slow.next;
-        fast = fast.next.next;
-    }
-    if (fast != null) slow = slow.next;  // 偶数节点，让 slow 指向下一个节点
-    cut(head, slow);                     // 切成两个链表
-    return isEqual(head, reverse(slow));
-}
-
-private void cut(ListNode head, ListNode cutNode) {
-    while (head.next != cutNode) {
-        head = head.next;
-    }
-    head.next = null;
-}
-
-private ListNode reverse(ListNode head) {
-    ListNode newHead = null;
-    while (head != null) {
-        ListNode nextNode = head.next;
-        head.next = newHead;
-        newHead = head;
-        head = nextNode;
-    }
-    return newHead;
-}
-
-private boolean isEqual(ListNode l1, ListNode l2) {
-    while (l1 != null && l2 != null) {
-        if (l1.val != l2.val) return false;
-        l1 = l1.next;
-        l2 = l2.next;
-    }
-    return true;
-}
+```python
+class Solution(object):
+    def isPalindrome(self, head):
+        def reverse(head):
+            if not head:
+                return
+            prev, cur = None, head
+            while cur:
+                nxt = cur.next
+                cur.next = prev
+                prev, cur = cur, nxt
+            return prev
+            
+        if not head or not head.next:
+            return True
+        fast, slow = head.next, head
+        while fast and fast.next:
+            fast = fast.next.next
+            slow = slow.next
+        fast_head = slow.next
+        slow.next = None
+        p2 = reverse(fast_head)
+        p1 = head
+        while p1 and p2:
+            if p1.val!=p2.val:
+                return False
+            p1, p2 = p1.next, p2.next
+        return True
 ```
 
 #  9. 分隔链表
@@ -293,30 +278,31 @@ The input has been split into consecutive parts with size difference at most 1, 
 
 题目描述：把链表分隔成 k 部分，每部分的长度都应该尽可能相同，排在前面的长度应该大于等于后面的。
 
-```java
-public ListNode[] splitListToParts(ListNode root, int k) {
-    int N = 0;
-    ListNode cur = root;
-    while (cur != null) {
-        N++;
-        cur = cur.next;
-    }
-    int mod = N % k;
-    int size = N / k;
-    ListNode[] ret = new ListNode[k];
-    cur = root;
-    for (int i = 0; cur != null && i < k; i++) {
-        ret[i] = cur;
-        int curSize = size + (mod-- > 0 ? 1 : 0);
-        for (int j = 0; j < curSize - 1; j++) {
-            cur = cur.next;
-        }
-        ListNode next = cur.next;
-        cur.next = null;
-        cur = next;
-    }
-    return ret;
-}
+```python
+class Solution(object):
+    def splitListToParts(self, root, k):
+        n = 0
+        p = root
+        while p:
+            p = p.next
+            n += 1
+        zhengchu = n / k
+        yushu = n % k
+        ret = [None for i in range(k)]
+        cur = root
+        for i in range(k):
+            if cur:
+                ret[i] = cur
+                cnt = zhengchu + (1 if yushu>0 else 0)
+                yushu -= 1
+                while cnt-1>0:
+                    cur = cur.next
+                    cnt -= 1
+                print(cur.val)
+                nxt = cur.next
+                cur.next = None
+                cur = nxt
+        return ret
 ```
 
 #  10. 链表元素按奇偶聚集
